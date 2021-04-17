@@ -1,18 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import { Agenda } from 'react-native-calendars';
+import HolidayService from '../services/holiday';
 
 type Item = {
     name: string;
+    description: string;
 }
 
 const CalendarList = () => {
-    const [items, setItems] = useState<{[key: string]: Item[]}>({
-        '2021-04-17': [{ name: 'test1' }, { name: 'test11' }],
-        '2021-04-18': [{ name: 'test2' }],
-        '2021-04-20': [{ name: 'test1' }, { name: 'test11' }],
-        '2021-04-21': [{ name: 'test2' }]
-    });
+    const [items, setItems] = useState<{[key: string]: Item[]}>({});
+
+    const load = async () => {
+        let holidayService = new HolidayService();
+        try {
+            let response = await holidayService.getHolidays('ro', 2021);
+            let data = await response.json();
+            if (data && data.response) {
+                let itemsObject = {};
+                for (let holiday of data.response.holidays) {
+                    let date = holiday.date.iso;
+                    if (!itemsObject[date]) {
+                        itemsObject[date] = [];
+                    }
+                    itemsObject[date].push({
+                        name: holiday.name,
+                        description: holiday.description
+                    });
+                }
+                
+                setItems(itemsObject);
+            }
+        }
+        catch (e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        load();
+    }, []);
  
     const renderItem = (item: Item) => {
         return (
