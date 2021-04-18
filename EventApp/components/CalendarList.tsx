@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { Agenda } from 'react-native-calendars';
+import { Alert, Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
+import { Agenda,Calendar } from 'react-native-calendars';
 import HolidayService from '../services/holiday';
-
+import LocalCalendarService from '../services/localCalendar';
 type Item = {
     name: string;
     description: string;
@@ -10,8 +10,12 @@ type Item = {
 
 const CalendarList = () => {
     const [items, setItems] = useState<{[key: string]: Item[]}>({});
+    const [event, setEvent] = useState(null);
 
     const load = async () => {
+        let localCalendars = new LocalCalendarService();
+        let items = await localCalendars.listEvents();
+        console.log(items);
         let holidayService = new HolidayService();
         try {
             let response = await holidayService.getHolidays('ro', 2021);
@@ -28,7 +32,6 @@ const CalendarList = () => {
                         description: holiday.description
                     });
                 }
-                
                 setItems(itemsObject);
             }
         }
@@ -49,9 +52,13 @@ const CalendarList = () => {
         );
     };
 
+   
+
     return (
         <SafeAreaView style={styles.safe}>
-            <Agenda items={items} renderItem={renderItem}/>
+            <Agenda 
+            items={items} 
+            renderItem={renderItem} />
         </SafeAreaView>
     );
 }

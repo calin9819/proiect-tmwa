@@ -8,3 +8,8 @@ const stringifyParams = (params) => {
 }
 
 export default stringifyParams;
+
+
+export const dateToString = (date) => {
+    return date.toISOString().split('T')[0];
+};
