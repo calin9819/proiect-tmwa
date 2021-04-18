@@ -3,6 +3,7 @@ import { Alert, Button, SafeAreaView, StyleSheet, Text, View } from 'react-nativ
 import { Agenda,Calendar } from 'react-native-calendars';
 import HolidayService from '../services/holiday';
 import LocalCalendarService from '../services/localCalendar';
+import { dateToString } from '../utils/utils';
 type Item = {
     name: string;
     description: string;
@@ -10,18 +11,20 @@ type Item = {
 
 const CalendarList = () => {
     const [items, setItems] = useState<{[key: string]: Item[]}>({});
-    const [event, setEvent] = useState(null);
-
+    const [selectedDay, setSelectedDay] = useState<string>("");
     const load = async () => {
         let localCalendars = new LocalCalendarService();
-        let items = await localCalendars.listEvents();
-        console.log(items);
+        let localItems = await localCalendars.listCalendars();
+
         let holidayService = new HolidayService();
         try {
             let response = await holidayService.getHolidays('ro', 2021);
             let data = await response.json();
             if (data && data.response) {
                 let itemsObject = {};
+                Object.keys(items).forEach((key) => {
+                    itemsObject[key] = items[key];
+                  });
                 for (let holiday of data.response.holidays) {
                     let date = holiday.date.iso;
                     if (!itemsObject[date]) {
@@ -52,13 +55,12 @@ const CalendarList = () => {
         );
     };
 
-   
-
     return (
         <SafeAreaView style={styles.safe}>
             <Agenda 
             items={items} 
-            renderItem={renderItem} />
+            renderItem={renderItem}
+            onDayPress={day=>{setSelectedDay(day.dateString)}}/>
         </SafeAreaView>
     );
 }

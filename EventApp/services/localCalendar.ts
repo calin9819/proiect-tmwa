@@ -1,8 +1,9 @@
 import RNCalendarEvents from 'react-native-calendar-events'; 
+//aduce calendarele din tlf
 class LocalCalendarService {
-    async listEvents(){
+    async listCalendars(){
         let permissions;
-        let events = [];
+        let calendars = [];
         try {
             permissions = await RNCalendarEvents.checkPermissions();
             if (permissions !== 'authorized') {
@@ -13,10 +14,10 @@ class LocalCalendarService {
               throw 'Access calendar not authorized';
             }
         
-            events = await RNCalendarEvents.findCalendars();
+            calendars = await RNCalendarEvents.findCalendars();
           } catch {}
         
-          return events;
+          return calendars;
     }
 
      async addCalendarEvent(event){

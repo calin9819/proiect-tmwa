@@ -6,9 +6,11 @@ import IEvent from '../models/IEvent.interface'
 import {dateToString} from '../utils/utils'
 import LocalCalendarService from '../services/localCalendar';
 export default function CurrentDay() {
+
     const [value, setValue] = useState<string>("");
     const [eventList, setEvents] = useState<IEvent[]>([]);
     const [error, showError] = useState<Boolean>(false);
+
     let calendarService = new LocalCalendarService();
     const handleSubmit = (): void => {
         if (value.trim()){
@@ -17,6 +19,17 @@ export default function CurrentDay() {
         }
         else showError(true);
         setValue("");
+      };
+      const removeItem = (index: number): void => {
+        const newEventList = [...eventList];
+        newEventList.splice(index, 1);
+        setEvents(newEventList);
+      };
+    
+      const toggleComplete = (index: number): void => {
+        const newEventList = [...eventList];
+        newEventList[index].completed = !newEventList[index].completed;
+        setEvents(newEventList);
       };
   return (
 <View style={styles.container}>
@@ -46,10 +59,10 @@ export default function CurrentDay() {
             {event.text}
           </Text>
           <Button
-            title={event.completed ? "Completed" : "Complete"}
-            onPress={() => {}}
+            title={event.completed ? "Done" : "Complete"}
+            onPress={() => toggleComplete(index)}
           />
-          <Button title="X" onPress={() => {}} color="crimson" />
+          <Button title="X" onPress={() => removeItem(index)} color="crimson" />
         </View>
       ))}
     </View>
