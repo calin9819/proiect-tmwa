@@ -4,6 +4,7 @@ import { Agenda,Calendar } from 'react-native-calendars';
 import HolidayService from '../services/holiday';
 import LocalCalendarService from '../services/localCalendar';
 import { dateToString } from '../utils/utils';
+import CurrentDay from './CurrentDay';
 type Item = {
     name: string;
     description: string;
@@ -57,6 +58,7 @@ const CalendarList = () => {
 
     return (
         <SafeAreaView style={styles.safe}>
+            <CurrentDay/>
             <Agenda 
             items={items} 
             renderItem={renderItem}
