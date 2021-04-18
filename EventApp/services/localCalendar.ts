@@ -21,7 +21,7 @@ class LocalCalendarService {
     }
 
      async addCalendarEvent(event){
-         console.log(event)
+        //console.log(event)
         let permissions;
         let createdEvent = false;
         try {

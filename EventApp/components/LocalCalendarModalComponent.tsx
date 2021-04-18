@@ -33,7 +33,7 @@ function LocalCalendarModalComponent(props) {
   let localCalendarService = new LocalCalendarService();
   useEffect(() => {
     const loadCalendars = async () => {
-      const calendarsTmp = await localCalendarService.listEvents();
+      const calendarsTmp = await localCalendarService.listCalendars();
       setCalendars(calendarsTmp);
     };
     if (props.isVisible) {

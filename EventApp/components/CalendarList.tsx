@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Button, SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { Agenda,Calendar } from 'react-native-calendars';
+import { Alert, Button, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Agenda, Calendar } from 'react-native-calendars';
+import IEvent from '../models/IEvent.interface';
 import HolidayService from '../services/holiday';
 import LocalCalendarService from '../services/localCalendar';
 import { dateToString } from '../utils/utils';
@@ -11,12 +12,12 @@ type Item = {
 }
 
 const CalendarList = () => {
-    const [items, setItems] = useState<{[key: string]: Item[]}>({});
+    const [items, setItems] = useState<{ [key: string]: Item[] }>({});
     const [selectedDay, setSelectedDay] = useState<string>("");
+    const [value, setValue] = useState<string>("");
+    const [eventList, setEvents] = useState<IEvent[]>([]);
+    const [error, showError] = useState<Boolean>(false);
     const load = async () => {
-        let localCalendars = new LocalCalendarService();
-        let localItems = await localCalendars.listCalendars();
-
         let holidayService = new HolidayService();
         try {
             let response = await holidayService.getHolidays('ro', 2021);
@@ -25,7 +26,7 @@ const CalendarList = () => {
                 let itemsObject = {};
                 Object.keys(items).forEach((key) => {
                     itemsObject[key] = items[key];
-                  });
+                });
                 for (let holiday of data.response.holidays) {
                     let date = holiday.date.iso;
                     if (!itemsObject[date]) {
@@ -47,7 +48,7 @@ const CalendarList = () => {
     useEffect(() => {
         load();
     }, []);
- 
+
     const renderItem = (item: Item) => {
         return (
             <View style={styles.itemContainer}>
@@ -56,13 +57,49 @@ const CalendarList = () => {
         );
     };
 
+    const handleSubmit = (): void => {
+        if (value.trim()) {
+            let itemsObject = {};
+            Object.keys(items).forEach((key) => {
+                itemsObject[key] = items[key];
+            });
+            let date = selectedDay;
+            if (!itemsObject[date]) {
+                itemsObject[date] = [];
+            }
+            itemsObject[date].push({
+                name: value,
+                description: ''
+            });
+
+            setItems(itemsObject);
+        }
+        else showError(true);
+        setValue("");
+    };
+
     return (
         <SafeAreaView style={styles.safe}>
-            <CurrentDay/>
-            <Agenda 
-            items={items} 
-            renderItem={renderItem}
-            onDayPress={day=>{setSelectedDay(day.dateString)}}/>
+
+            <View style={styles.addEventContainer}>
+                <Text style={styles.title}>Event List</Text>
+                <View style={styles.inputWrapper}>
+                    <TextInput
+                        placeholder="Enter your event title..."
+                        value={value}
+                        onChangeText={e => { setValue(e); }}
+                        style={styles.inputBox}
+                    />
+                    <Button title="Add event" onPress={handleSubmit} />
+                </View>
+                {error && (
+                    <Text style={styles.error}>Error: Input field is empty...</Text>
+                )}
+            </View>
+            <Agenda
+                items={items}
+                renderItem={renderItem}
+                onDayPress={day => { setSelectedDay(day.dateString) }} />
         </SafeAreaView>
     );
 }
@@ -85,4 +122,31 @@ const styles = StyleSheet.create({
         position: 'relative',
         top: 15
     },
+
+    addEventContainer: {
+        padding: 35,
+        alignItems: "center"
+    },
+    title: {
+        fontSize: 40,
+        marginBottom: 40,
+    },
+    addButton: {
+        alignItems: "flex-end"
+    },
+    inputWrapper: {
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 20
+    },
+    inputBox: {
+        width: 200,
+        borderRadius: 3,
+        borderWidth: 1,
+        paddingLeft: 8
+    },
+    error: {
+        color: "red"
+    }
 })
