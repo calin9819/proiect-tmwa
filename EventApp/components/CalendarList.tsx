@@ -24,9 +24,6 @@ const CalendarList = () => {
             let data = await response.json();
             if (data && data.response) {
                 let itemsObject = {};
-                Object.keys(items).forEach((key) => {
-                    itemsObject[key] = items[key];
-                });
                 for (let holiday of data.response.holidays) {
                     let date = holiday.date.iso;
                     if (!itemsObject[date]) {
@@ -59,10 +56,7 @@ const CalendarList = () => {
 
     const handleSubmit = (): void => {
         if (value.trim()) {
-            let itemsObject = {};
-            Object.keys(items).forEach((key) => {
-                itemsObject[key] = items[key];
-            });
+            let itemsObject = items;
             let date = selectedDay;
             if (!itemsObject[date]) {
                 itemsObject[date] = [];
