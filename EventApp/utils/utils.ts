@@ -1,16 +1,19 @@
-const stringifyParams = (params) => {
-    let result = '?';
-    for (let key in params) {
-        result = result + '&' + key + '=' + params[key]; 
-    }
+import { Asset } from "expo-asset";
+import * as FileSystem from "expo-file-system";
+import * as SQLite from "expo-sqlite";
 
-    return result;
-}
+const stringifyParams = (params) => {
+  let result = "?";
+  for (let key in params) {
+    result = result + "&" + key + "=" + params[key];
+  }
+
+  return result;
+};
 
 export default stringifyParams;
 
-
 export const dateToString = (date) => {
-    console.log(date)
-    return date.toISOString().split('T')[0];
+  console.log(date);
+  return date.toISOString().split("T")[0];
 };

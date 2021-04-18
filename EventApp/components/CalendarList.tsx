@@ -6,6 +6,9 @@ import HolidayService from '../services/holiday';
 import LocalCalendarService from '../services/localCalendar';
 import { dateToString } from '../utils/utils';
 import CurrentDay from './CurrentDay';
+import * as SQLite from 'expo-sqlite';
+import { Database } from 'expo-sqlite';
+
 type Item = {
     name: string;
     description: string;
@@ -17,6 +20,9 @@ const CalendarList = () => {
     const [value, setValue] = useState<string>("");
     const [eventList, setEvents] = useState<IEvent[]>([]);
     const [error, showError] = useState<Boolean>(false);
+
+    const db = SQLite.openDatabase('events-db.db');
+
     const load = async () => {
         let holidayService = new HolidayService();
         try {
@@ -31,7 +37,8 @@ const CalendarList = () => {
                     }
                     itemsObject[date].push({
                         name: holiday.name,
-                        description: holiday.description
+                        description: holiday.description,
+                        date: date
                     });
                 }
                 setItems(itemsObject);
@@ -42,8 +49,19 @@ const CalendarList = () => {
         }
     }
 
+    const loadFromDatabase = async () => {
+        (await db).transaction(tx => {
+            tx.executeSql(
+              `select * from events;`,
+              [],
+              (_, { rows }) => console.log(rows)
+            );
+          });
+    }
+
     useEffect(() => {
         load();
+        loadFromDatabase();
     }, []);
 
     const renderItem = (item: Item) => {
@@ -75,7 +93,7 @@ const CalendarList = () => {
     return (
         <SafeAreaView style={styles.safe}>
 
-            <View style={styles.addEventContainer}>
+            {/* <View style={styles.addEventContainer}>
                 <Text style={styles.title}>Event List</Text>
                 <View style={styles.inputWrapper}>
                     <TextInput
@@ -89,7 +107,7 @@ const CalendarList = () => {
                 {error && (
                     <Text style={styles.error}>Error: Input field is empty...</Text>
                 )}
-            </View>
+            </View> */}
             <Agenda
                 items={items}
                 renderItem={renderItem}
