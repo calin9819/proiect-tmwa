@@ -5,11 +5,13 @@ import * as Font from 'expo-font';
 import * as SQLite from 'expo-sqlite';
 import CalendarNavigator from './navigation/CalendarNavigator';
 import AppLoading from 'expo-app-loading';
+import colors from './utils/colors';
 
 const fetchFonts = () => {
   return Font.loadAsync({
     'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
-    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf'),
+    'bebas-neue': require('./assets/fonts/BebasNeue-Regular.ttf'),
   });
 };
 
@@ -53,7 +55,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.primaryColor,
     alignItems: 'center',
     justifyContent: 'center',
   },

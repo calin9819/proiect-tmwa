@@ -9,8 +9,7 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <Text style={styles.title}>Welcome!</Text>
       <Text style={styles.subtitle}>What's the plan for today?</Text>
-      <Button
-      title="Go to agenda"
+      <Button title="Go to agenda"
       onPress={() =>
         navigation.navigate('Agenda', { name: 'Agenda' })
       }
@@ -42,7 +41,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 40,
     marginBottom: 40,
-    color: colors.accentColor
+    color: colors.accentColor,
+    fontFamily: 'bebas-neue'
   },
   subtitle: {
     fontSize: 20,
@@ -55,8 +55,9 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 10
   },
-  addButton: {
-    alignItems: "flex-end"
+  button: {
+    alignItems: "flex-end",
+    backgroundColor:colors.coral
   },
   event: {
     width: 200

@@ -13,7 +13,7 @@ const defaultStackNavOptions = {
       backgroundColor: Colors.primaryColor,
     },
     headerTitleStyle: {
-      fontFamily: 'open-sans'
+      fontFamily: 'bebas-neue'
     },
     headerBackTitleStyle: {
       fontFamily: 'open-sans'
