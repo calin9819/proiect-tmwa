@@ -10,7 +10,9 @@ const AgendaEntryDetail = (props) => {
         console.log("redirect to delete")
     };
 
-    console.log("props", props);
+    const closeShowDetails = () => {
+        props.hideFunc();
+    }
 
     return (
         props.show &&
@@ -18,6 +20,7 @@ const AgendaEntryDetail = (props) => {
             <Text style={styles.title}>Name: {props.selectedItem.name}</Text>
             <Text style={styles.subtitle}>Description: {props.selectedItem.description}</Text>
             <Text style={styles.subtitle}>Date: {props.selectedItem.date}</Text>
+            <Button title="Close" onPress={closeShowDetails} />
             <Button title="Edit" onPress={redirectToEdit} />
             <Button title="Delete" onPress={redirectToDelete} />
         </View>

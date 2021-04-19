@@ -147,6 +147,7 @@ const CalendarList = ({ navigation, route }) => {
        <AgendaEntryDetail
          show={getShow()}
          selectedItem={getSelectedItem()}
+         hideFunc={() => {setShow(false)}}
        />
        <Agenda
         items={items}
