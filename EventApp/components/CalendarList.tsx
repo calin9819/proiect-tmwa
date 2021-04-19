@@ -7,6 +7,7 @@ import {
   Text,
   TextInput,
   View,
+  TouchableOpacity
 } from "react-native";
 import { Agenda, Calendar } from "react-native-calendars";
 import IEvent from "../models/IEvent.interface";
@@ -18,6 +19,7 @@ import { Database } from "expo-sqlite";
 import * as SQLite from "expo-sqlite";
 import { FAB } from "react-native-paper";
 import colors from '../utils/colors';
+import AgendaEntryDetail from './AgendaEntryDetail';
 
 type Item = {
   name: string;
@@ -79,11 +81,25 @@ const CalendarList = ({ navigation, route }) => {
     load();
   }, []);
 
+  const [show, setShow] = useState(false);
+
+  const getShow = () => {
+    return show;
+  };
+
+  const openPopup = () => {
+    setShow(true);
+
+    console.log("openPopup function called");
+  };
+
   const renderItem = (item: Item) => {
     return (
-      <View style={styles.itemContainer}>
-        <Text>{item.name}</Text>
-      </View>
+      <TouchableOpacity onPress={openPopup}>
+        <View style={styles.itemContainer} >
+          <Text>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
     );
   };
 
@@ -122,7 +138,10 @@ const CalendarList = ({ navigation, route }) => {
                     <Text style={styles.error}>Error: Input field is empty...</Text>
                 )}
             </View> */}
-      <Agenda
+       <AgendaEntryDetail
+        show={getShow()}
+       />
+       <Agenda
         items={items}
         renderItem={renderItem}
         refreshing={refreshing}
