@@ -1,100 +1,146 @@
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
-import CalendarList from './CalendarList';
-import IEvent from '../models/IEvent.interface'
-import { dateToString } from '../utils/utils'
-import LocalCalendarService from '../services/localCalendar';
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { dateToString } from "../utils/utils";
+import { TextInput, HelperText, Button, Snackbar } from "react-native-paper";
+import colors from "../utils/colors";
+import * as SQLite from "expo-sqlite";
 
-const EventDetails = (props) => {
+const db = SQLite.openDatabase("events-db.db");
 
-  const [value, setValue] = useState<string>("");
-  const [eventList, setEvents] = useState<IEvent[]>([]);
-  const [error, showError] = useState<Boolean>(false);
+const EventDetails = ({ navigation }) => {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState(dateToString(new Date()));
+  const [errorMessage, setErrorMessage] = useState("Name is required!");
+  const [snackbarVisible, setSnackbarVisible] = useState(false);
 
-  let calendarService = new LocalCalendarService();
-  const handleSubmit = (): void => {
-    if (value.trim()) {
-      setEvents([...eventList, { text: value, completed: false, date: props.selectedDay }]);
-      calendarService.addCalendarEvent({ text: value, completed: false, date: dateToString(new Date()) })
+  const checkForErrors = () => {
+    if (name === "") {
+      setErrorMessage("Name is required!");
+      setSnackbarVisible(true);
+      return true;
+    } else if (description === "") {
+      setErrorMessage("Description is required!");
+      setSnackbarVisible(true);
+      return true;
+    } else if (date === "") {
+      setErrorMessage("Date is required!");
+      setSnackbarVisible(true);
+      return true;
+    } else {
+      if (!/([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))/.test(date)) {
+        setErrorMessage('Date format must be "YYYY-MM-DD"!');
+        setSnackbarVisible(true);
+        return true;
+      }
     }
-    else showError(true);
-    setValue("");
-  };
-  const removeItem = (index: number): void => {
-    const newEventList = [...eventList];
-    newEventList.splice(index, 1);
-    setEvents(newEventList);
+
+    setErrorMessage("");
+    setSnackbarVisible(false);
+    return false;
   };
 
-  const toggleComplete = (index: number): void => {
-    const newEventList = [...eventList];
-    newEventList[index].completed = !newEventList[index].completed;
-    setEvents(newEventList);
+  const addEvent = async () => {
+    let hasErrors = checkForErrors();
+    if (!hasErrors) {
+      try {
+        (await db).transaction((tx) => {
+          tx.executeSql("insert into events (name, description, date) values (?, ?, ?)", [
+            name,
+            description,
+            date,
+          ]);
+        }, (error)=>{console.log(error)}, () => {
+          navigation.popToTop();
+          navigation.navigate("Agenda", {name: "Agenda"});
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
   };
-
-  const saveEvents=()=>{
-    const newEvents = [...eventList]
-  }
-  useEffect(()=>{
-    //props.eventList.setParams({save: saveEvents});
-  })
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Event List</Text>
-      <View style={styles.inputWrapper}>
-        <TextInput
-          placeholder="Enter your event title..."
-          value={value}
-          onChangeText={e => { setValue(e); }}
-          style={styles.inputBox}
-        />
-        <Button title="Add event" onPress={handleSubmit} />
-      </View>
-      {error && (
-        <Text style={styles.error}>Error: Input field is empty...</Text>
-      )}
-      <Text style={styles.subtitle}>Your events for today:</Text>
-      {eventList.length === 0 && <Text>No events available</Text>}
-      {eventList.map((event: IEvent, index: number) => (
-        <View style={styles.listItem} key={`${index}_${event.text}`}>
-          <Text
-            style={[
-              styles.event,
-              { textDecorationLine: event.completed ? "line-through" : "none" }
-            ]}
-          >
-            {event.text}
-          </Text>
-          <Button
-            title={event.completed ? "Done" : "Complete"}
-            onPress={() => toggleComplete(index)}
-          />
-          <Button title="X" onPress={() => removeItem(index)} color="crimson" />
-        </View>
-      ))}
-    </View>
+    <SafeAreaView style={styles.safe}>
+      <TextInput
+        style={styles.inputWrapper}
+        label="Event name"
+        value={name}
+        onChangeText={(text) => setName(text)}
+        selectionColor={colors.blue}
+        underlineColor={colors.blue}
+        underlineColorAndroid={colors.blue}
+      />
+      <TextInput
+        style={styles.inputWrapper}
+        label="Event description"
+        value={description}
+        onChangeText={(text) => setDescription(text)}
+        selectionColor={colors.blue}
+        underlineColor={colors.blue}
+        underlineColorAndroid={colors.blue}
+        multiline={true}
+      />
+      <TextInput
+        style={styles.inputWrapper}
+        label="Date"
+        value={date}
+        selectionColor={colors.blue}
+        underlineColor={colors.blue}
+        underlineColorAndroid={colors.blue}
+        onChangeText={(text) => setDate(text)}
+      />
+      <HelperText style={styles.helperText} type="info">
+        Date format must be "YYYY-MM-DD"
+      </HelperText>
+      <Button style={styles.button} onPress={addEvent} color="#ffffff">
+        Add event
+      </Button>
+      <Snackbar
+        visible={snackbarVisible}
+        onDismiss={() => {
+          setSnackbarVisible(false);
+        }}
+        style={styles.errorMessage}
+      >
+        {errorMessage}
+      </Snackbar>
+    </SafeAreaView>
   );
-}
+};
 export default EventDetails;
 
 const styles = StyleSheet.create({
+  safe: {
+    width: "100%",
+    flex: 1,
+  },
   container: {
     padding: 35,
-    alignItems: "center"
+    alignItems: "center",
+    width: "100%",
+  },
+  button: {
+    backgroundColor: colors.blue,
+    margin: 15,
+  },
+  errorMessage: {
+    marginBottom: 750,
+  },
+  helperText: {
+    marginLeft: 15,
   },
   inputWrapper: {
-    width: "100%",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 20
+    margin: 15,
+    marginTop: 20,
+    marginBottom: 0,
   },
   inputBox: {
     width: 200,
     borderRadius: 3,
     borderWidth: 1,
-    paddingLeft: 8
+    paddingLeft: 8,
   },
   title: {
     fontSize: 40,
@@ -109,15 +155,15 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     width: "100%",
-    marginBottom: 10
+    marginBottom: 10,
   },
   addButton: {
-    alignItems: "flex-end"
+    alignItems: "flex-end",
   },
   event: {
-    width: 200
+    width: 200,
   },
   error: {
-    color: "red"
-  }
+    color: "red",
+  },
 });

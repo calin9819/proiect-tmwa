@@ -32,7 +32,7 @@ const CalendarNavigator = ()=>{
               options={{ title: 'Home' }}
             />
             <Stack.Screen name="Agenda" component={CalendarList} />
-            <Stack.Screen name="AddEvent" component={EventDetails} />
+            <Stack.Screen name="Add" component={EventDetails} />
           </Stack.Navigator>
         </NavigationContainer>
       );

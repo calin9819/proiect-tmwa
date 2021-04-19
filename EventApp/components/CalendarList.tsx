@@ -138,7 +138,7 @@ const CalendarList = ({ navigation, route }) => {
         style={styles.fab}
         small
         icon="plus"
-        onPress={() => navigation.navigate('AddEvent', { name: 'AddEvent' })}
+        onPress={() => navigation.navigate('Add', { name: 'Add a new event' })}
       />
     </SafeAreaView>
   );
@@ -195,6 +195,6 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     right: 0,
     bottom: 0,
-    backgroundColor: '#00bbf2',
+    backgroundColor: colors.blue,
   },
 });

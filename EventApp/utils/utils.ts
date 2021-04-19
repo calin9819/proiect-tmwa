@@ -14,6 +14,5 @@ const stringifyParams = (params) => {
 export default stringifyParams;
 
 export const dateToString = (date) => {
-  console.log(date);
   return date.toISOString().split("T")[0];
 };
