@@ -16,6 +16,8 @@ import { dateToString } from "../utils/utils";
 import EventDetails from "./EventDetails";
 import { Database } from "expo-sqlite";
 import * as SQLite from "expo-sqlite";
+import { FAB } from "react-native-paper";
+import colors from '../utils/colors';
 
 type Item = {
   name: string;
@@ -132,6 +134,12 @@ const CalendarList = ({ navigation, route }) => {
           setSelectedDay(day.dateString);
         }}
       />
+      <FAB
+        style={styles.fab}
+        small
+        icon="plus"
+        onPress={() => navigation.navigate('AddEvent', { name: 'AddEvent' })}
+      />
     </SafeAreaView>
   );
 };
@@ -180,5 +188,13 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
+  },
+  fab: {
+    position: "absolute",
+    marginRight: 25,
+    marginBottom: 50,
+    right: 0,
+    bottom: 0,
+    backgroundColor: '#00bbf2',
   },
 });

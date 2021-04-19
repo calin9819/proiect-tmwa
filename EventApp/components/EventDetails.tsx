@@ -37,7 +37,7 @@ const EventDetails = (props) => {
     const newEvents = [...eventList]
   }
   useEffect(()=>{
-    props.eventList.setParams({save: saveEvents});
+    //props.eventList.setParams({save: saveEvents});
   })
 
   return (

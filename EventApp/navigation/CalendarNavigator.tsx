@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import CalendarList from '../components/CalendarList';
 import HomeScreen from '../screens/HomeScreen';
 import Colors from '../utils/colors'
+import EventDetails from '../components/EventDetails';
 
 const Stack = createStackNavigator();
 const defaultStackNavOptions = {
@@ -31,6 +32,7 @@ const CalendarNavigator = ()=>{
               options={{ title: 'Home' }}
             />
             <Stack.Screen name="Agenda" component={CalendarList} />
+            <Stack.Screen name="AddEvent" component={EventDetails} />
           </Stack.Navigator>
         </NavigationContainer>
       );
