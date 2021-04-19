@@ -10,12 +10,14 @@ const AgendaEntryDetail = (props) => {
         console.log("redirect to delete")
     };
 
+    console.log("props", props);
+
     return (
         props.show &&
         <View style={styles.container}>
-            <Text style={styles.title}>Name: {props.name}</Text>
-            <Text style={styles.subtitle}>Description: {props.description}</Text>
-            <Text style={styles.subtitle}>Date: {props.date}</Text>
+            <Text style={styles.title}>Name: {props.selectedItem.name}</Text>
+            <Text style={styles.subtitle}>Description: {props.selectedItem.description}</Text>
+            <Text style={styles.subtitle}>Date: {props.selectedItem.date}</Text>
             <Button title="Edit" onPress={redirectToEdit} />
             <Button title="Delete" onPress={redirectToDelete} />
         </View>

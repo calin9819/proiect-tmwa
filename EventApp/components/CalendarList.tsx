@@ -82,20 +82,26 @@ const CalendarList = ({ navigation, route }) => {
   }, []);
 
   const [show, setShow] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
 
   const getShow = () => {
     return show;
   };
 
-  const openPopup = () => {
-    setShow(true);
+  const getSelectedItem = () => {
+    return selectedItem;
+  }
 
-    console.log("openPopup function called");
+  const openPopup = (item) => {
+    setShow(true);
+    setSelectedItem(item);
+
+    console.log("openPopup function called for item:", item);
   };
 
   const renderItem = (item: Item) => {
     return (
-      <TouchableOpacity onPress={openPopup}>
+      <TouchableOpacity onPress={() => openPopup(item)}>
         <View style={styles.itemContainer} >
           <Text>{item.name}</Text>
         </View>
@@ -139,7 +145,8 @@ const CalendarList = ({ navigation, route }) => {
                 )}
             </View> */}
        <AgendaEntryDetail
-        show={getShow()}
+         show={getShow()}
+         selectedItem={getSelectedItem()}
        />
        <Agenda
         items={items}
