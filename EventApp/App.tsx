@@ -24,15 +24,6 @@ export default function App() {
         'CREATE TABLE if not exists events (id	INTEGER primary key not null, name text, description text, date text)'
       );
     });
-
-    db.transaction(
-      tx => {
-        tx.executeSql('insert into events values (0, ?, ?, ?)', ['Event test', 'This is a test event', '2021-04-19']);
-        tx.executeSql('select * from events', [], (_, { rows }) =>
-          console.log(JSON.stringify(rows))
-        );
-      }
-    );
   }, []);
 
   const [fontLoaded, setFontLoaded] = useState(false);
