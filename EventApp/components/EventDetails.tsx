@@ -6,7 +6,7 @@ import IEvent from '../models/IEvent.interface'
 import { dateToString } from '../utils/utils'
 import LocalCalendarService from '../services/localCalendar';
 
-const CurrentDay = (props) => {
+const EventDetails = (props) => {
 
   const [value, setValue] = useState<string>("");
   const [eventList, setEvents] = useState<IEvent[]>([]);
@@ -77,7 +77,7 @@ const CurrentDay = (props) => {
     </View>
   );
 }
-export default CurrentDay;
+export default EventDetails;
 
 const styles = StyleSheet.create({
   container: {

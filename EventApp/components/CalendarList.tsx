@@ -5,7 +5,7 @@ import IEvent from '../models/IEvent.interface';
 import HolidayService from '../services/holiday';
 import LocalCalendarService from '../services/localCalendar';
 import { dateToString } from '../utils/utils';
-import CurrentDay from './CurrentDay';
+import EventDetails from './EventDetails';
 import * as SQLite from 'expo-sqlite';
 import { Database } from 'expo-sqlite';
 
@@ -14,7 +14,7 @@ type Item = {
     description: string;
 }
 
-const CalendarList = () => {
+const CalendarList = ({ navigation, route }) => {
     const [items, setItems] = useState<{ [key: string]: Item[] }>({});
     const [selectedDay, setSelectedDay] = useState<string>("");
     const [value, setValue] = useState<string>("");

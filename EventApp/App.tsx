@@ -1,9 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useEffect } from 'react';
+import React, { useEffect,useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import CalendarList from './components/CalendarList';
-import CurrentDay from './components/CurrentDay';
+import * as Font from 'expo-font';
 import * as SQLite from 'expo-sqlite';
+import CalendarNavigator from './navigation/CalendarNavigator';
+import AppLoading from 'expo-app-loading';
+
+const fetchFonts = () => {
+  return Font.loadAsync({
+    'open-sans': require('./assets/fonts/OpenSans-Regular.ttf'),
+    'open-sans-bold': require('./assets/fonts/OpenSans-Bold.ttf')
+  });
+};
 
 export default function App() {
   const db = SQLite.openDatabase('events-db.db');
@@ -17,7 +25,7 @@ export default function App() {
 
     db.transaction(
       tx => {
-        tx.executeSql('insert into events values (0, ?, ?, ?)', ['Event test', 'This is a test event', '2021-04-18']);
+        tx.executeSql('insert into events values (0, ?, ?, ?)', ['Event test', 'This is a test event', '2021-04-19']);
         tx.executeSql('select * from events', [], (_, { rows }) =>
           console.log(JSON.stringify(rows))
         );
@@ -25,12 +33,20 @@ export default function App() {
     );
   }, []);
 
+  const [fontLoaded, setFontLoaded] = useState(false);
+
+  if (!fontLoaded) {
+    return (
+      <AppLoading
+        startAsync={fetchFonts}
+        onFinish={() => setFontLoaded(true)}
+        onError={console.warn}
+      />
+    );
+  }
 
   return (
-    <View style={styles.container}>
-      <CalendarList/>
-      {/* <CurrentDay/> */}
-    </View>
+      <CalendarNavigator/>
   );
 }
 
