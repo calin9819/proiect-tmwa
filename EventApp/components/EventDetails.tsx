@@ -1,17 +1,17 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 import { StyleSheet, Text, View, SafeAreaView } from "react-native";
-import { dateToString } from "../utils/utils";
 import { TextInput, HelperText, Button, Snackbar } from "react-native-paper";
 import colors from "../utils/colors";
 import * as SQLite from "expo-sqlite";
+import utils from "../utils/utils";
 
 const db = SQLite.openDatabase("events-db.db");
 
 const EventDetails = ({ navigation }) => {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [date, setDate] = useState(dateToString(new Date()));
+  const [date, setDate] = useState(utils.dateToString(new Date()));
   const [errorMessage, setErrorMessage] = useState("Name is required!");
   const [snackbarVisible, setSnackbarVisible] = useState(false);
 

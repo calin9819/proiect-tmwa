@@ -1,3 +1,4 @@
+import utils from '../utils/utils';
 import stringifyParams from '../utils/utils';
 
 class HolidayService {
@@ -15,7 +16,7 @@ class HolidayService {
         year
     };
 
-    const response = await fetch(this.url + stringifyParams(params), {
+    const response = await fetch(this.url + utils.stringifyParams(params), {
         method: 'GET',
         headers: {
             Accept: 'application/json',

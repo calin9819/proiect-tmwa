@@ -13,13 +13,13 @@ import { Agenda, Calendar } from "react-native-calendars";
 import IEvent from "../models/IEvent.interface";
 import HolidayService from "../services/holiday";
 import LocalCalendarService from "../services/localCalendar";
-import { dateToString } from "../utils/utils";
 import EventDetails from "./EventDetails";
 import { Database } from "expo-sqlite";
 import * as SQLite from "expo-sqlite";
 import { FAB } from "react-native-paper";
 import colors from '../utils/colors';
 import AgendaEntryDetail from './AgendaEntryDetail';
+import utils from "../utils/utils";
 
 const db = SQLite.openDatabase("events-db.db");
 
@@ -70,6 +70,24 @@ const CalendarList = ({ navigation, route }) => {
         }
     };
 
+    const loadMonthItems = (day)=> {
+        setTimeout(() => {
+          for (let i = -15; i < 85; i++) {
+            const time = day.timestamp + i * 24 * 60 * 60 * 1000;
+            const strTime = utils.timeToString(time);
+            if (!items[strTime]) {
+              items[strTime] = [];
+            }
+          }
+          const newItems = {};
+          Object.keys(items).forEach(key => {
+            newItems[key] = items[key];
+          });
+          setItems(newItems);
+        }, 1000);
+      }
+     
+
     useEffect(() => {
         setRefreshing(true);
         load();
@@ -114,6 +132,7 @@ const CalendarList = ({ navigation, route }) => {
     const dayPress = (day) => {
         setSelectedDay(day.dateString);
         if (items[day.dateString] === undefined) {
+            items[day.dateString]=[];
             eventList[day.dateString]=[];
         } else{
             eventList[day.dateString]=items[day.dateString]
@@ -149,7 +168,8 @@ const CalendarList = ({ navigation, route }) => {
     return (
         <SafeAreaView style={styles.safe}>
             <Agenda
-                items={eventList}
+                items={items}
+                loadItemsForMonth={loadMonthItems.bind(this)}
                 renderItem={renderItem}
                 renderEmptyDate={renderEmptyDate}
                 refreshing={refreshing}
