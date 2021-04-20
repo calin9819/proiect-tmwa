@@ -5,15 +5,30 @@ import { TextInput, HelperText, Button, Snackbar } from "react-native-paper";
 import colors from "../utils/colors";
 import * as SQLite from "expo-sqlite";
 import utils from "../utils/utils";
+import { Database } from 'expo-sqlite';
 
 const db = SQLite.openDatabase("events-db.db");
 
-const EventDetails = ({ navigation }) => {
+const EventDetails = ({ navigation, route }) => {
+  const [id, setId] = useState();
+  const [isEdit, setIsEdit] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [date, setDate] = useState(utils.dateToString(new Date()));
   const [errorMessage, setErrorMessage] = useState("Name is required!");
   const [snackbarVisible, setSnackbarVisible] = useState(false);
+  console.log(route);
+
+  useEffect(() => {
+    if (route && route.params && route.params.selectedItem) {
+      let item = route.params.selectedItem;
+      setIsEdit(true);
+      setId(item.id);
+      setName(item.name);
+      setDescription(item.description);
+      setDate(item.date);
+    }
+  }, [])
 
   const checkForErrors = () => {
     if (name === "") {
@@ -61,6 +76,27 @@ const EventDetails = ({ navigation }) => {
     }
   };
 
+  const editEvent = async () => {
+    let hasErrors = checkForErrors();
+    if (!hasErrors) {
+      try {
+        (await db).transaction((tx) => {
+          tx.executeSql("update events set name = ?, description = ?, date = ? where id = ?", [
+            name,
+            description,
+            date,
+            id
+          ]);
+        }, (error)=>{console.log(error)}, () => {
+          navigation.popToTop();
+          navigation.navigate("Agenda", {name: "Agenda"});
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+  };
+
   return (
     <SafeAreaView style={styles.safe}>
       <TextInput
@@ -94,8 +130,8 @@ const EventDetails = ({ navigation }) => {
       <HelperText style={styles.helperText} type="info">
         Date format must be "YYYY-MM-DD"
       </HelperText>
-      <Button style={styles.button} onPress={addEvent} color="#ffffff">
-        Add event
+      <Button style={styles.button} onPress={isEdit ? editEvent : addEvent} color="#ffffff">
+        {isEdit ? "Save changes" : "Add event"}
       </Button>
       <Snackbar
         visible={snackbarVisible}

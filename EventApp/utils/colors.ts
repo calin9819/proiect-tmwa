@@ -6,5 +6,6 @@ export default {
     peach:'#ff9393',
     blue:'#00bbf2',
     red:"#FF0000",
-    green:"#008000"
+    green:"#008000",
+    white: '#fff'
 };

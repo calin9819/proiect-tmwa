@@ -33,6 +33,7 @@ const CalendarNavigator = ()=>{
             />
             <Stack.Screen name="Agenda" component={CalendarList} />
             <Stack.Screen name="Add" component={EventDetails} />
+            <Stack.Screen name="Edit" component={EventDetails} />
           </Stack.Navigator>
         </NavigationContainer>
       );
