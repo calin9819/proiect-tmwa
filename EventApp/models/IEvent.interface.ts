@@ -1,5 +1,5 @@
 export default interface IEvent {
-    text: string;
+    name: string;
+    description: string;
     date: string;
-    completed: boolean;
 }
