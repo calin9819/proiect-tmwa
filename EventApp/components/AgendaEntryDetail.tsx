@@ -31,9 +31,6 @@ const AgendaEntryDetail = (props) => {
         props.hideFunc();
     }
 
-    const [isEditAvaible] = props.selectedItem? props.selectedItem.id ? useState(true) : useState(false) : useState(false)
-    
-
     return (
         props.show &&
         <View style={styles.container}>
@@ -45,7 +42,7 @@ const AgendaEntryDetail = (props) => {
                             current={props.selectedItem.date} 
                             markedDates={props.markedDay}/>
                         <Text style={styles.subtitle}>Description: {props.selectedItem.description}</Text>
-                         { isEditAvaible ? (
+                        { props.selectedItem.id >= 0? (
                         <View style={{ flexDirection: 'row', margin: 10 }}>
                             <View style={styles.editButton}>
                                 <Button title="Edit" onPress={redirectToEdit} color={colors.green} />
