@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, SafeAreaView } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView, ImageBackground } from "react-native";
 import { TextInput, HelperText, Button, Snackbar } from "react-native-paper";
 import colors from "../utils/colors";
 import * as SQLite from "expo-sqlite";
@@ -98,38 +98,48 @@ const EventDetails = ({ navigation, route }) => {
   };
 
   return (
+    <ImageBackground
+    source={require('../assets/fundal5.jpg')}
+        style={styles.background}>
     <SafeAreaView style={styles.safe}>
+      
+      <View style={styles.centeredView}>
       <TextInput
         style={styles.inputWrapper}
         label="Event name"
         value={name}
         onChangeText={(text) => setName(text)}
-        selectionColor={colors.blue}
-        underlineColor={colors.blue}
-        underlineColorAndroid={colors.blue}
+        selectionColor={colors.accentColor}
+        underlineColor={colors.coral}
+        underlineColorAndroid={colors.coral}
+        left={<TextInput.Icon name="pencil" color={colors.coral} onPress={() => {}} />}
       />
       <TextInput
         style={styles.inputWrapper}
         label="Event description"
         value={description}
         onChangeText={(text) => setDescription(text)}
-        selectionColor={colors.blue}
-        underlineColor={colors.blue}
-        underlineColorAndroid={colors.blue}
+        selectionColor={colors.accentColor}
+        underlineColor={colors.coral}
+        underlineColorAndroid={colors.coral}
         multiline={true}
+        left={<TextInput.Icon name="pencil" color={colors.coral} onPress={() => {}} />}
       />
       <TextInput
         style={styles.inputWrapper}
         label="Date"
         value={date}
-        selectionColor={colors.blue}
-        underlineColor={colors.blue}
-        underlineColorAndroid={colors.blue}
+        selectionColor={colors.accentColor}
+        underlineColor={colors.coral}
+        underlineColorAndroid={colors.coral}
         onChangeText={(text) => setDate(text)}
+        left={<TextInput.Icon name="calendar" color={colors.coral} onPress={() => {}} />}
       />
       <HelperText style={styles.helperText} type="info">
         Date format must be "YYYY-MM-DD"
       </HelperText>
+
+
       <Button style={styles.button} onPress={isEdit ? editEvent : addEvent} color="#ffffff">
         {isEdit ? "Save changes" : "Add event"}
       </Button>
@@ -142,15 +152,24 @@ const EventDetails = ({ navigation, route }) => {
       >
         {errorMessage}
       </Snackbar>
+      </View>
     </SafeAreaView>
+    </ImageBackground>
   );
 };
 export default EventDetails;
 
 const styles = StyleSheet.create({
+  background: {
+    width: '100%',
+    height: '100%'
+  },
   safe: {
-    width: "100%",
+    margin:30,
+    justifyContent:"center",
+    alignContent: "center",
     flex: 1,
+    borderRadius:10,
   },
   container: {
     padding: 35,
@@ -158,8 +177,13 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   button: {
-    backgroundColor: colors.blue,
+    backgroundColor: colors.accentColor,
     margin: 15,
+  },
+  centeredView: {
+    flex: 1,
+    marginTop:60
+  
   },
   errorMessage: {
     marginBottom: 750,
@@ -171,6 +195,8 @@ const styles = StyleSheet.create({
     margin: 15,
     marginTop: 20,
     marginBottom: 0,
+    backgroundColor: colors.grey,
+    shadowOpacity:0.1,
   },
   inputBox: {
     width: 200,

@@ -6,12 +6,12 @@ import {
   TextInput,
   Modal,
   TouchableHighlight,
+  ImageBackground,
 } from "react-native";
 import colors from "../utils/colors";
 import { Calendar } from "react-native-calendars";
 import * as SQLite from "expo-sqlite";
 import { Button } from "react-native-paper";
-import Dialog from "react-native-dialog";
 const db = SQLite.openDatabase("events-db.db");
 
 const AgendaEntryDetail = (props) => {
@@ -56,6 +56,9 @@ const AgendaEntryDetail = (props) => {
 
   return (
     props.show && (
+      <ImageBackground
+      source={require('../assets/fundal5.jpg')}
+          style={styles.background}>
         <View style={styles.container}>
           <Modal animationType="fade" transparent={false} visible={props.show}>
             <View style={styles.centeredView}>
@@ -73,7 +76,7 @@ const AgendaEntryDetail = (props) => {
                     <Button
                       onPress={redirectToEdit}
                       style={styles.editButton}
-                      color={colors.white}
+                      color={colors.primaryColor}
                     >
                       Edit
                     </Button>
@@ -81,7 +84,7 @@ const AgendaEntryDetail = (props) => {
                     <Button
                       onPress={redirectToDelete}
                       style={styles.deleteButton}
-                      color={colors.white}
+                      color={colors.primaryColor}
                     >
                       Delete
                     </Button>
@@ -93,6 +96,7 @@ const AgendaEntryDetail = (props) => {
             </View>
           </Modal>
         </View>
+        </ImageBackground>
     )
   );
 };
@@ -101,7 +105,6 @@ export default AgendaEntryDetail;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.primaryColor
   },
   centeredView: {
     flex: 1,
@@ -109,12 +112,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalView: {
-    width: "90%",
+    width: "95%",
     height: "80%",
-    backgroundColor: "white",
     borderRadius: 5,
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor:  colors.grey,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -139,7 +141,7 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   editButton: {
-    backgroundColor: colors.green,
+    backgroundColor: colors.accentColor,
     borderRadius: 5,
     padding: 10,
     elevation: 2,
@@ -147,7 +149,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   deleteButton: {
-    backgroundColor: colors.red,
+    backgroundColor: colors.coral,
     borderRadius: 5,
     padding: 10,
     elevation: 2,
@@ -159,4 +161,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  background: {
+    width: '100%',
+    height: '100%'
+  }
 });

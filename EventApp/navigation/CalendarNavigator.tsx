@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform, Text } from 'react-native';
+import { Platform, StyleSheet, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,11 +7,12 @@ import CalendarList from '../components/CalendarList';
 import HomeScreen from '../screens/HomeScreen';
 import Colors from '../utils/colors'
 import EventDetails from '../components/EventDetails';
+import colors from '../utils/colors';
 
 const Stack = createStackNavigator();
 const defaultStackNavOptions = {
     headerStyle: {
-      backgroundColor: Colors.primaryColor,
+      backgroundColor: colors.grey,
     },
     headerTitleStyle: {
       fontFamily: 'bebas-neue'
@@ -40,3 +41,16 @@ const CalendarNavigator = ()=>{
 };
 
 export default CalendarNavigator;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.primaryColor,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  background: {
+    width: '100%',
+    height: '100%'
+  }
+});

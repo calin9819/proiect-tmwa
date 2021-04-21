@@ -8,6 +8,7 @@ import {
   TextInput,
   View,
   TouchableOpacity,
+  ImageBackground,
 } from "react-native";
 import { Agenda, Calendar } from "react-native-calendars";
 import IEvent from "../models/IEvent.interface";
@@ -168,6 +169,9 @@ const CalendarList = ({ navigation, route }) => {
   };
 
   return (
+    <ImageBackground
+    source={require('../assets/fundal5.jpg')}
+        style={styles.background}>
     <SafeAreaView style={styles.safe}>
       <Agenda
         items={items}
@@ -204,15 +208,23 @@ const CalendarList = ({ navigation, route }) => {
         }}
       />
     </SafeAreaView>
+    </ImageBackground>
   );
 };
 
 export default CalendarList;
 
 const styles = StyleSheet.create({
+  background: {
+    width: '100%',
+    height: '100%'
+  },
   safe: {
-    width: "100%",
+    margin:30,
+    justifyContent:"center",
+    alignContent: "center",
     flex: 1,
+    borderRadius:10
   },
   itemContainer: {
     backgroundColor: "white",
@@ -258,7 +270,8 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     right: 0,
     bottom: 0,
-    backgroundColor: colors.blue,
+    backgroundColor: colors.coral,
+    color:"white"
   },
   emptyDate: {
     height: 15,
