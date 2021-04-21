@@ -196,7 +196,7 @@ const CalendarList = ({ navigation, route }) => {
         }}
         reloadList={() => {
           navigation.popToTop();
-          navigation.navigate("Add", { name: "Add a new event" });
+          navigation.navigate("Agenda", { name: "Agenda" });
         }}
         goToEdit={() => {
             setShow(false);
