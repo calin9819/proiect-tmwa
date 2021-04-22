@@ -183,39 +183,39 @@ const CalendarList = ({ navigation, route }) => {
 
   return (
     <ImageBackground
-      source={require('../assets/fundal5.jpg')}
-      style={styles.background}>
-      <SafeAreaView style={styles.safe}>
-        <Agenda
-          items={items}
-          //   loadItemsForMonth={loadMonthItems.bind(this)}
-          renderItem={renderItem}
-          renderEmptyDate={renderEmptyDate}
-          refreshing={refreshing}
-          onRefresh={() => {
-            console.log("refreshing...");
-            load();
-          }}
-          onDayPress={dayPress}
-        />
-        <FAB
-          style={styles.fab}
-          small
-          icon="plus"
-          onPress={() => navigation.navigate("Add", { name: "Add a new event" })}
-        />
-        <AgendaEntryDetail
-          show={getShow()}
-          markedDay={getMarkedDay()}
-          selectedItem={getSelectedItem()}
-          hideFunc={() => {
-            setShow(false);
-          }}
-          reloadList={() => {
-            navigation.popToTop();
-            navigation.navigate("Add", { name: "Add a new event" });
-          }}
-          goToEdit={() => {
+    source={require('../assets/fundal5.jpg')}
+        style={styles.background}>
+    <SafeAreaView style={styles.safe}>
+      <Agenda
+        items={items}
+        //loadItemsForMonth={loadMonthItems.bind(this)}
+        renderItem={renderItem}
+        renderEmptyDate={renderEmptyDate}
+        refreshing={refreshing}
+        onRefresh={() => {
+          console.log("refreshing...");
+          load();
+        }}
+        onDayPress={dayPress}
+      />
+      <FAB
+        style={styles.fab}
+        small
+        icon="plus"
+        onPress={() => navigation.navigate("Add", { name: "Add a new event" })}
+      />
+      <AgendaEntryDetail
+        show={getShow()}
+        markedDay={getMarkedDay()}
+        selectedItem={getSelectedItem()}
+        hideFunc={() => {
+          setShow(false);
+        }}
+        reloadList={() => {
+          navigation.popToTop();
+          navigation.navigate("Agenda", { name: "Agenda" });
+        }}
+        goToEdit={() => {
             setShow(false);
             navigation.navigate("Edit", { selectedItem: selectedItem });
           }}
