@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
   
   },
   errorMessage: {
-    marginBottom: 750,
+    marginBottom: 700,
   },
   helperText: {
     marginLeft: 15,
