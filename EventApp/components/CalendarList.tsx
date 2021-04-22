@@ -21,6 +21,7 @@ import { FAB } from "react-native-paper";
 import colors from "../utils/colors";
 import AgendaEntryDetail from "./AgendaEntryDetail";
 import utils from "../utils/utils";
+import { color } from "react-native-reanimated";
 
 const db = SQLite.openDatabase("events-db.db");
 
@@ -172,10 +173,19 @@ const CalendarList = ({ navigation, route }) => {
   };
 
   const renderItem = (item: IEvent) => {
+    let itemStyle = styles.itemContainer;
+    let textStyle = styles.textItem;
+    if(item.date == utils.dateToString(new Date())){
+      itemStyle = {...itemStyle,
+        backgroundColor: colors.peach
+      };
+      textStyle = {...textStyle, color: colors.coral}
+    } 
     return (
       <TouchableOpacity onPress={() => openPopup(item)}>
-        <View style={styles.itemContainer}>
-          <Text>{item.name}</Text>
+        <View style={itemStyle}>
+          <Text style = {textStyle}>{item.name}</Text>
+          <Text>{item.description}</Text>
         </View>
       </TouchableOpacity>
     );
@@ -197,6 +207,15 @@ const CalendarList = ({ navigation, route }) => {
           load();
         }}
         onDayPress={dayPress}
+        theme={{
+          selectedDayBackgroundColor: colors.coral,
+          selectedDayTextColor: '#ffffff',
+          dotColor: colors.coral,
+          todayTextColor: colors.coral,
+          agendaDayNumColor: colors.accentColor,
+          agendaTodayColor: colors.coral,
+          agendaKnobColor: colors.grey
+        }}
       />
       <FAB
         style={styles.fab}
@@ -240,8 +259,8 @@ const styles = StyleSheet.create({
     borderRadius: 10
   },
   itemContainer: {
-    backgroundColor: "white",
-    margin: 5,
+    backgroundColor: colors.accentColor,
+    margin: 15,
     borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
@@ -249,6 +268,11 @@ const styles = StyleSheet.create({
     padding: 25,
     position: "relative",
     top: 15,
+  },
+  textItem:{
+    color: colors.primaryColor,
+    fontSize: 16,
+    fontStyle:"italic"
   },
 
   addEventContainer: {

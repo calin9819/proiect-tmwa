@@ -112,7 +112,8 @@ const EventDetails = ({ navigation, route }) => {
         selectionColor={colors.accentColor}
         underlineColor={colors.coral}
         underlineColorAndroid={colors.coral}
-        left={<TextInput.Icon name="pencil" color={colors.coral} onPress={() => {}} />}
+        left={<TextInput.Icon name="pencil" color={colors.coral} />}
+        theme={{colors:{accent:colors.accentColor, primary: colors.accentColor}}}
       />
       <TextInput
         style={styles.inputWrapper}
@@ -124,6 +125,7 @@ const EventDetails = ({ navigation, route }) => {
         underlineColorAndroid={colors.coral}
         multiline={true}
         left={<TextInput.Icon name="pencil" color={colors.coral} onPress={() => {}} />}
+        theme={{colors:{accent:colors.accentColor, primary: colors.accentColor}}}
       />
       <TextInput
         style={styles.inputWrapper}
@@ -134,6 +136,7 @@ const EventDetails = ({ navigation, route }) => {
         underlineColorAndroid={colors.coral}
         onChangeText={(text) => setDate(text)}
         left={<TextInput.Icon name="calendar" color={colors.coral} onPress={() => {}} />}
+        theme={{colors:{accent:colors.accentColor, primary: colors.accentColor}}}
       />
       <HelperText style={styles.helperText} type="info">
         Date format must be "YYYY-MM-DD"
