@@ -62,6 +62,11 @@ const CalendarList = ({ navigation, route }) => {
             }
           }
 
+          let currentDay = utils.dateToString(new Date());
+          if (itemsObject[currentDay] === undefined) {
+            itemsObject[currentDay] = [];
+          }
+
           setItems(itemsObject);
           setRefreshing(false);
         });
@@ -70,7 +75,9 @@ const CalendarList = ({ navigation, route }) => {
       console.log(e);
     }
   };
+  const initializeCurrentDay = () => {
 
+  }
   const loadMonthItems = (day) => {
     setTimeout(() => {
       for (let i = -15; i < 85; i++) {
@@ -91,6 +98,7 @@ const CalendarList = ({ navigation, route }) => {
   useEffect(() => {
     setRefreshing(true);
     load();
+    initializeCurrentDay();
   }, []);
 
   const [show, setShow] = useState(false);
@@ -122,23 +130,18 @@ const CalendarList = ({ navigation, route }) => {
     console.log("openPopup function called for item:", item);
   };
 
-  const renderItem = (item: IEvent) => {
-    return (
-      <TouchableOpacity onPress={() => openPopup(item)}>
-        <View style={styles.itemContainer}>
-          <Text>{item.name}</Text>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
   const dayPress = (day) => {
+    //selected day -> ultima zi selectata
+    if (selectedDay && selectedDay != utils.dateToString(new Date())) {
+      if (items[selectedDay] !== undefined) {
+        if (items[selectedDay].length == 0) {
+          items[selectedDay] = undefined;
+        }
+      }
+    }
     setSelectedDay(day.dateString);
     if (items[day.dateString] === undefined) {
       items[day.dateString] = [];
-      eventList[day.dateString] = [];
-    } else {
-      eventList[day.dateString] = items[day.dateString];
     }
   };
 
@@ -168,46 +171,56 @@ const CalendarList = ({ navigation, route }) => {
     );
   };
 
+  const renderItem = (item: IEvent) => {
+    return (
+      <TouchableOpacity onPress={() => openPopup(item)}>
+        <View style={styles.itemContainer}>
+          <Text>{item.name}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <ImageBackground
-    source={require('../assets/fundal5.jpg')}
-        style={styles.background}>
-    <SafeAreaView style={styles.safe}>
-      <Agenda
-        items={items}
-        loadItemsForMonth={loadMonthItems.bind(this)}
-        renderItem={renderItem}
-        renderEmptyDate={renderEmptyDate}
-        refreshing={refreshing}
-        onRefresh={() => {
-          console.log("refreshing...");
-          load();
-        }}
-        onDayPress={dayPress}
-      />
-      <FAB
-        style={styles.fab}
-        small
-        icon="plus"
-        onPress={() => navigation.navigate("Add", { name: "Add a new event" })}
-      />
-      <AgendaEntryDetail
-        show={getShow()}
-        markedDay={getMarkedDay()}
-        selectedItem={getSelectedItem()}
-        hideFunc={() => {
-          setShow(false);
-        }}
-        reloadList={() => {
-          navigation.popToTop();
-          navigation.navigate("Add", { name: "Add a new event" });
-        }}
-        goToEdit={() => {
+      source={require('../assets/fundal5.jpg')}
+      style={styles.background}>
+      <SafeAreaView style={styles.safe}>
+        <Agenda
+          items={items}
+          //   loadItemsForMonth={loadMonthItems.bind(this)}
+          renderItem={renderItem}
+          renderEmptyDate={renderEmptyDate}
+          refreshing={refreshing}
+          onRefresh={() => {
+            console.log("refreshing...");
+            load();
+          }}
+          onDayPress={dayPress}
+        />
+        <FAB
+          style={styles.fab}
+          small
+          icon="plus"
+          onPress={() => navigation.navigate("Add", { name: "Add a new event" })}
+        />
+        <AgendaEntryDetail
+          show={getShow()}
+          markedDay={getMarkedDay()}
+          selectedItem={getSelectedItem()}
+          hideFunc={() => {
+            setShow(false);
+          }}
+          reloadList={() => {
+            navigation.popToTop();
+            navigation.navigate("Add", { name: "Add a new event" });
+          }}
+          goToEdit={() => {
             setShow(false);
             navigation.navigate("Edit", { selectedItem: selectedItem });
-        }}
-      />
-    </SafeAreaView>
+          }}
+        />
+      </SafeAreaView>
     </ImageBackground>
   );
 };
@@ -220,11 +233,11 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   safe: {
-    margin:30,
-    justifyContent:"center",
+    margin: 30,
+    justifyContent: "center",
     alignContent: "center",
     flex: 1,
-    borderRadius:10
+    borderRadius: 10
   },
   itemContainer: {
     backgroundColor: "white",
@@ -271,7 +284,7 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     backgroundColor: colors.coral,
-    color:"white"
+    color: "white"
   },
   emptyDate: {
     height: 15,
