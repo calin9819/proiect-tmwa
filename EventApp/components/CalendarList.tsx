@@ -17,7 +17,7 @@ import LocalCalendarService from "../services/localCalendar";
 import EventDetails from "./EventDetails";
 import { Database } from "expo-sqlite";
 import * as SQLite from "expo-sqlite";
-import { FAB } from "react-native-paper";
+import { FAB, Avatar } from "react-native-paper";
 import colors from "../utils/colors";
 import AgendaEntryDetail from "./AgendaEntryDetail";
 import utils from "../utils/utils";
@@ -184,6 +184,7 @@ const CalendarList = ({ navigation, route }) => {
     return (
       <TouchableOpacity onPress={() => openPopup(item)}>
         <View style={itemStyle}>
+          {item && item['id']  >= 0 && <Avatar.Icon style={styles.icon} size={24} icon="account" />}
           <Text style = {textStyle}>{item.name}</Text>
           <Text>{item.description}</Text>
         </View>
@@ -272,7 +273,8 @@ const styles = StyleSheet.create({
   textItem:{
     color: colors.primaryColor,
     fontSize: 16,
-    fontStyle:"italic"
+    fontStyle:"italic",
+    marginBottom: 5
   },
 
   addEventContainer: {
@@ -315,4 +317,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 50,
   },
+  icon: {
+    backgroundColor: '#fff',
+    color: colors.accentColor,
+    position: 'absolute',
+    top: 10,
+    right: 10
+  }
 });
